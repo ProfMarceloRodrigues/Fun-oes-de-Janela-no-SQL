@@ -1,0 +1,10 @@
+select *  from DimStore
+
+
+select
+FORMAT(
+L.OpenDate,'mmm/yyyy') as mes,
+sum(L.SellingAreaSize)as tamanho_Mes,
+ SUM( L.SellingAreaSize)/ sum(sum(L.SellingAreaSize)) over() *100 as Total_Geral--- Calculo  do percentual 
+from  DimStore L
+group by format(L.OpenDate,'mmm/yyyy')
