@@ -1,0 +1,35 @@
+Select *
+Into ABC
+from DimProduct
+
+----- Revisaõ tabela  temporaria
+
+
+----- Calcular media   movel   no sql
+
+select
+*
+
+
+from ABC
+
+select
+convert(char,A.AvailableForSaleDate, 103) as mes,
+sum(A.UnitPrice) as Total
+
+from ABC A
+group  by convert(char,A.AvailableForSaleDate, 103) 
+order by mes
+
+-------media
+
+
+
+select
+convert(char,AvailableForSaleDate, 103) as mes,
+sum(UnitPrice) as Total,
+AVG(sum(UnitPrice))over (order by convert(char,AvailableForSaleDate, 103)rows between 6 preceding  and  current  row) as media_movel
+
+from ABC 
+group  by convert(char,AvailableForSaleDate, 103) 
+order by mes
