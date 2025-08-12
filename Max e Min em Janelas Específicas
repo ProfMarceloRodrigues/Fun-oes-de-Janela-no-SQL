@@ -1,0 +1,14 @@
+select * from DimStore
+
+
+select
+Format(Lojas.OpenDate, 'yyyy/mmm') as mes,
+sum(Lojas.SellingAreaSize) as  total_vendido_mes,
+MAX(sum(Lojas.SellingAreaSize)) over(order by Format(Lojas.OpenDate, 'yyyy/mmm')rows between 3
+preceding  and current row) as max_vendas_3_meses
+
+
+from DimStore Lojas
+
+group by Format(Lojas.OpenDate, 'yyyy/mmm')
+order by mes
