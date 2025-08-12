@@ -1,0 +1,68 @@
+use
+ContosoRetailDW
+go
+
+
+--- Comparação    de  valores    com lag()  -  Analise    yoy-  MoM
+
+select  *  from DimStore
+
+select
+CONVERT(char,
+S.OpenDate, 103) as Mes,
+sum(S.EmployeeCount) as  Total_Funcionario_Mes
+
+
+
+from DimStore S
+
+group  by  CONVERT(char,
+S.OpenDate, 103)  
+order by mes
+
+
+
+
+
+
+WITH vendas_mensais AS (
+    SELECT 
+        FORMAT(S.OpenDate, 'MM/yyyy') AS Mes,  -- Usando FORMAT para obter o mês e ano
+        SUM(S.EmployeeCount) AS Total_Funcionario_Mes
+    FROM 
+        DimStore S
+    GROUP BY 
+        FORMAT(S.OpenDate, 'MM/yyyy')  -- Agrupando por mês e ano
+)
+
+SELECT  
+    Mes,
+    Total_Funcionario_Mes,
+    LAG(Total_Funcionario_Mes,1,0) OVER(ORDER BY Mes) AS Vendas_mes_anterior,
+	Total_Funcionario_Mes - LAG(Total_Funcionario_Mes,1,0) OVER(ORDER BY Mes) as  Diferenca
+FROM 
+    vendas_mensais
+ORDER BY 
+    Mes;
+
+
+
+	WITH vendas_mensais AS (
+    SELECT 
+        FORMAT(S.OpenDate, 'MM/yyyy') AS Mes,  -- Usando FORMAT para obter o mês e ano
+        SUM(S.EmployeeCount) AS Total_Funcionario_Mes
+    FROM 
+        DimStore S
+    GROUP BY 
+        FORMAT(S.OpenDate, 'MM/yyyy')  -- Agrupando por mês e ano
+)
+
+SELECT  
+    Mes,
+    Total_Funcionario_Mes,
+    Lead(Total_Funcionario_Mes,1,0) OVER(ORDER BY Mes) AS Vendas_mes_anterior
+FROM 
+    vendas_mensais
+ORDER BY 
+    Mes;
+
