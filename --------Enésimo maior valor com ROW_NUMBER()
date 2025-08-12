@@ -1,0 +1,22 @@
+--------Enésimo maior valor com ROW_NUMBER()
+select
+P.BrandName, P.ClassName, P.Weight,
+ROW_NUMBER() over(order by P.Weight desc)  as Posição
+
+
+from DimProduct P
+
+----- subquery
+
+select *
+from (
+		select
+		P.BrandName, P.ClassName, P.Weight,
+		ROW_NUMBER() over(order by P.Weight desc)  as Posição
+
+
+		from DimProduct P
+
+		) as Resuldo
+
+		where  Posição = 2
