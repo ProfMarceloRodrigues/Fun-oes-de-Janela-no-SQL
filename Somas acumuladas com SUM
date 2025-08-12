@@ -1,0 +1,20 @@
+WITH vendas_mensais AS (
+    SELECT 
+        YEAR(S.OpenDate) AS Ano,
+        MONTH(S.OpenDate) AS Mes,
+        SUM(S.EmployeeCount) AS Total_Funcionario_Mes
+    FROM 
+        DimStore S
+    GROUP BY 
+        YEAR(S.OpenDate), MONTH(S.OpenDate)
+)
+
+SELECT 
+    FORMAT(DATEFROMPARTS(Ano, Mes, 1), 'MM/yyyy') AS Mes,
+    Total_Funcionario_Mes,
+    SUM(Total_Funcionario_Mes) OVER (ORDER BY Ano, Mes) AS acumulado
+FROM 
+    vendas_mensais
+ORDER BY 
+    Ano, Mes;
+Para não consumir muito espaço no banco
