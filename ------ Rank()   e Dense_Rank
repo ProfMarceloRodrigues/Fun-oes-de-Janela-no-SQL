@@ -1,0 +1,23 @@
+----- Função de  janela
+------ Rank()   e Dense_Rank
+
+select *  from DimProduct
+
+select
+P.BrandName,
+P.ClassName,
+P.UnitPrice,
+RANK() over(order by P.UnitPrice desc) as Posicao
+
+
+from  DimProduct P
+
+---------  Não  ´pular    a sequencia
+select
+P.BrandName,
+P.ClassName,
+P.UnitPrice,
+Dense_RANK() over(order by P.UnitPrice desc) as Posicao
+
+
+from  DimProduct P
