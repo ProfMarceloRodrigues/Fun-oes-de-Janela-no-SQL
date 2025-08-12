@@ -1,0 +1,9 @@
+select * from DimProduct
+
+select
+P.BrandName " Marca do Produto",
+P.ProductName " Nome  do  Produto",
+P.UnitPrice " Preco Unitario",
+rank() over(partition by P.BrandName order by P.UnitPrice desc)  " Posicao"---  rank  de marca
+
+from DimProduct P
