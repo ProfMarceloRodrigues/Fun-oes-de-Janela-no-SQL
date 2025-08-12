@@ -1,0 +1,10 @@
+select * from DimCustomer
+
+
+select
+C.CustomerKey Id,
+CONCAT(
+C.FirstName, ' ', C.LastName) " Nome Completo",
+c.YearlyIncome as Renda,
+NTILE(4) over (order by c.YearlyIncome desc) as faixa_renda
+from DimCustomer C --- Classificando  por  classe social
