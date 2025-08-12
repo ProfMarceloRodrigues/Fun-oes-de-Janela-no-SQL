@@ -1,0 +1,52 @@
+-- Analise   de pareto 
+
+select * from DimStore
+
+select
+S.StoreKey as Id,
+S.StoreName as Nome,
+sum(S.SellingAreaSize) as Faturamento
+
+
+from DimStore S
+
+group by s.StoreKey,S.StoreName
+
+
+------- Subquery
+select 
+Nome,Faturamento,
+SUM(Faturamento) over(order by Faturamento desc) /
+SUM(Faturamento) over() * 100 percentual_acumulado
+from (
+select
+S.StoreKey as Id,
+S.StoreName as Nome,
+sum(S.SellingAreaSize) as Faturamento
+
+
+from DimStore S
+
+group by s.StoreKey,S.StoreName) as  tabela
+
+----CTE
+WITH FaturamentoPorLoja AS (
+    SELECT
+        S.StoreKey AS Id,
+        S.StoreName AS Nome,
+        SUM(S.SellingAreaSize) AS Faturamento
+    FROM 
+        DimStore S
+    GROUP BY 
+        S.StoreKey, S.StoreName
+)
+
+SELECT 
+    Nome,
+    Faturamento,
+    SUM(Faturamento) OVER (ORDER BY Faturamento DESC) / SUM(Faturamento) OVER () * 100 AS percentual_acumulado
+FROM 
+    FaturamentoPorLoja
+ORDER BY 
+    Faturamento DESC;
+
